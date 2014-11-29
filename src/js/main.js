@@ -1,5 +1,3 @@
-var game
-
 window.onload = function () {
   'use strict'
 
@@ -7,7 +5,7 @@ window.onload = function () {
     , height = window.innerHeight
     , ns = window['koala-climb']
 
-  game = new Phaser.Game(width, height, Phaser.CANVAS, '')
+  var game = new Phaser.Game(width, height, Phaser.CANVAS, '')
 
   game.state.add('boot', ns.Boot)
   game.state.add('preloader', ns.Preloader)

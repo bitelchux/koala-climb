@@ -8,35 +8,41 @@
   Play.prototype = {
 
     create: function () {
-      var x = this.game.width / 2
-        , y = this.game.height / 2
+      var w = this.game.width
+        , h = this.game.height
 
-      this.player = this.add.sprite(x, y, 'player')
-      this.player.anchor.setTo(0.5, 0.5)
+      this.TRUNK_HEIGHT = 70
+
       this.input.onDown.add(this.onInputDown, this)
+
+      this.trunks = this.game.add.group()
+      for (var i = h; i > 0; i -= this.TRUNK_HEIGHT) {
+        var trunk = new window['koala-climb'].Trunk(this.game, w/2, i)
+        this.trunks.add(trunk)
+      }
     },
 
     update: function () {
-      var x, y, cx, cy, dx, dy, angle, scale
 
-      x = this.input.position.x
-      y = this.input.position.y
-      cx = this.world.centerX
-      cy = this.world.centerY
+    },
 
-      angle = Math.atan2(y - cy, x - cx) * (180 / Math.PI)
-      this.player.angle = angle
-
-      dx = x - cx
-      dy = y - cy
-      scale = Math.sqrt(dx * dx + dy * dy) / 100
-
-      this.player.scale.x = scale * 0.6
-      this.player.scale.y = scale * 0.6
+    generateTrunk: function() {
+      var trunkLocal = this.trunks.getFirstDead()
+      if(!trunkLocal) {
+        trunkLocal = new window['koala-climb'].Trunk(this.game, this.game.width/2, 1000)
+        this.trunks.add(trunkLocal)
+        console.log('new trunk!')
+      }
+      this.trunks.sort('y', Phaser.Group.SORT_ASCENDING)
+      trunkLocal.reset(this.game.width/2, this.trunks.getAt(0).y - this.TRUNK_HEIGHT)
     },
 
     onInputDown: function () {
-      this.game.state.start('menu')
+      this.generateTrunk()
+      this.trunks.callAllExists('moveDown', true, this)
+    },
+
+    render: function() {
     }
 
   }
