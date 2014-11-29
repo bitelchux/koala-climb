@@ -14,6 +14,7 @@
 
       this.load.onLoadComplete.addOnce(this.onLoadComplete, this)
       this.load.setPreloadSprite(this.asset)
+      this.load.image('koala', 'assets/koala.png')
       this.load.image('trunk', 'assets/trunk.png')
       this.load.image('player', 'assets/player.png')
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml')
