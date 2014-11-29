@@ -1,17 +1,18 @@
 var game
 
 window.onload = function () {
-  'use strict';
+  'use strict'
 
   var width = window.innerWidth
     , height = window.innerHeight
-    , ns = window['koala-climb'];
-  var game = new Phaser.Game(width, height, Phaser.CANVAS, '');
+    , ns = window['koala-climb']
 
-  game.state.add('boot', ns.Boot);
-  game.state.add('preloader', ns.Preloader);
-  game.state.add('menu', ns.Menu);
-  game.state.add('play', ns.Play);
+  game = new Phaser.Game(width, height, Phaser.CANVAS, '')
 
-  game.state.start('boot');
-};
+  game.state.add('boot', ns.Boot)
+  game.state.add('preloader', ns.Preloader)
+  game.state.add('menu', ns.Menu)
+  game.state.add('play', ns.Play)
+
+  game.state.start('boot')
+}
