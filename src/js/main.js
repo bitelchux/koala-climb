@@ -3,14 +3,13 @@ window.onload = function () {
 
   var width = window.innerWidth
     , height = window.innerHeight
-    , ns = window['koala-climb']
 
   var game = new Phaser.Game(width, height, Phaser.CANVAS, '')
 
-  game.state.add('boot', ns.Boot)
-  game.state.add('preloader', ns.Preloader)
-  game.state.add('menu', ns.Menu)
-  game.state.add('play', ns.Play)
+  game.state.add('boot', require('./boot'))
+  game.state.add('preloader', require('./preloader'))
+  game.state.add('menu', require('./menu'))
+  game.state.add('play', require('./play'))
 
   game.state.start('boot')
 }

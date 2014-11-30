@@ -1,5 +1,6 @@
 var gulp = require('gulp')
   , gutil = require('gulp-util')
+  , browserify = require('gulp-browserify')
   , clean = require('gulp-clean')
   , concat = require('gulp-concat')
   , rename = require('gulp-rename')
@@ -18,7 +19,8 @@ paths = {
     'src/bower_components/phaser-official/build/phaser.min.js'
   ],
   js:     ['src/js/**/*.js'],
-  dist:   './dist/'
+  dist:   './dist/',
+  finished: './dist/js/*.js'
 }
 
 gulp.task('clean', function () {
@@ -34,15 +36,32 @@ gulp.task('copy', ['clean'], function () {
     .on('error', gutil.log)
 })
 
-gulp.task('uglify', ['clean','lint'], function () {
-  var srcs = [paths.libs[0], paths.js[0]]
-
-  gulp.src(srcs)
-    .pipe(concat('main.min.js'))
-    .pipe(gulp.dest(paths.dist))
-//    .pipe(uglify({outSourceMaps: false}))
-//    .pipe(gulp.dest(paths.dist))
+gulp.task('copy-libs', ['clean'], function () {
+  gulp.src(paths.libs)
+    .pipe(concat('lib.js'))
+    .pipe(gulp.dest(paths.dist + 'js'))
+    .on('error', gutil.log)
 })
+
+// gulp.task('uglify', ['clean','lint'], function () {
+//   var srcs = [paths.libs[0], paths.js[0]]
+
+//   gulp.src(srcs)
+//     .pipe(concat('main.min.js'))
+//     .pipe(gulp.dest(paths.dist))
+//     .pipe(uglify({outSourceMaps: false}))
+//     .pipe(gulp.dest(paths.dist))
+// })
+
+gulp.task('browserify', ['clean', 'lint'], function() {
+  gulp.src('src/js/main.js')
+    .pipe(browserify({
+      insertGlobals : true,
+      debug : !gulp.env.production
+    }))
+    // .pipe(uglify({outSourceMaps: false}))
+    .pipe(gulp.dest(paths.dist + 'js'))
+});
 
 gulp.task('minifycss', ['clean'], function () {
   gulp.src(paths.css)
@@ -96,5 +115,5 @@ gulp.task('watch', function () {
 })
 
 gulp.task('default', ['connect', 'watch', 'build'])
-gulp.task('build', ['copy', 'uglify', 'minifycss', 'processhtml', 'minifyhtml'])
+gulp.task('build', ['copy', 'copy-libs', 'browserify', 'minifycss', 'processhtml', 'minifyhtml'])
 
