@@ -40,12 +40,12 @@ gulp.task('uglify', ['clean','lint'], function () {
   gulp.src(srcs)
     .pipe(concat('main.min.js'))
     .pipe(gulp.dest(paths.dist))
-    .pipe(uglify({outSourceMaps: false}))
-    .pipe(gulp.dest(paths.dist))
+//    .pipe(uglify({outSourceMaps: false}))
+//    .pipe(gulp.dest(paths.dist))
 })
 
 gulp.task('minifycss', ['clean'], function () {
- gulp.src(paths.css)
+  gulp.src(paths.css)
     .pipe(minifycss({
       keepSpecialComments: false,
       removeEmpty: true
