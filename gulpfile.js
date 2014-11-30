@@ -10,6 +10,7 @@ var gulp = require('gulp')
   , jshint = require('gulp-jshint')
   , uglify = require('gulp-uglify')
   , connect = require('gulp-connect')
+  , zip = require('gulp-zip')
   , paths
 
 paths = {
@@ -24,10 +25,9 @@ paths = {
 }
 
 gulp.task('clean', function () {
-  var stream = gulp.src(paths.dist, {read: false})
+  return gulp.src(paths.dist, {read: false})
     .pipe(clean({force: true}))
     .on('error', gutil.log)
-  return stream
 })
 
 gulp.task('copy', ['clean'], function () {
@@ -43,23 +43,15 @@ gulp.task('copy-libs', ['clean'], function () {
     .on('error', gutil.log)
 })
 
-// gulp.task('uglify', ['clean','lint'], function () {
-//   var srcs = [paths.libs[0], paths.js[0]]
-
-//   gulp.src(srcs)
-//     .pipe(concat('main.min.js'))
-//     .pipe(gulp.dest(paths.dist))
-//     .pipe(uglify({outSourceMaps: false}))
-//     .pipe(gulp.dest(paths.dist))
-// })
-
 gulp.task('browserify', ['clean', 'lint'], function() {
   gulp.src('src/js/main.js')
     .pipe(browserify({
       insertGlobals : true,
       debug : !gulp.env.production
     }))
-    // .pipe(uglify({outSourceMaps: false}))
+    .pipe(gulp.dest(paths.dist + 'js'))
+    .pipe(uglify({outSourceMaps: false}))
+    .pipe(rename({ extname: '.min.js' }))
     .pipe(gulp.dest(paths.dist + 'js'))
 });
 
@@ -103,7 +95,7 @@ gulp.task('html', function(){
 
 gulp.task('connect', function () {
   connect.server({
-    root: [__dirname + '/dist'],
+    root: [__dirname + '/dist', __dirname + '/tmp'],
     port: 8008,
     host: '0.0.0.0',
     livereload: true
@@ -113,6 +105,12 @@ gulp.task('connect', function () {
 gulp.task('watch', function () {
   gulp.watch(paths.js, ['lint'])
   gulp.watch(['./src/index.html', paths.css, paths.js], ['html'])
+})
+
+gulp.task('zip', function() {
+  return gulp.src('./dist/*')
+    .pipe(zip('Archive.zip'))
+    .pipe(gulp.dest('./dist/'));
 })
 
 gulp.task('default', ['connect', 'watch', 'build'])

@@ -21,6 +21,7 @@
     "gulp-uglify": "*",
     "gulp-util": "*",
     "gulp-watch": "*",
+    "gulp-zip": "^2.0.2",
     "tiny-lr": "*"
   },
   "scripts": {
