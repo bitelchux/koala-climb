@@ -7,7 +7,6 @@
     this.scale.x = 2
     this.scale.y = 2
     this.side = 'L'
-    this.isClimbing = false
     this.leftX = x
     this.rightX = x + 70
   }
@@ -19,9 +18,7 @@
   }
 
   Koala.prototype.climb = function(dir) {
-    this.isClimbing = true
     var climb
-
 
     if (dir === 'L' && this.side === 'R') {
       climb = this.game.add.tween(this).to({x: this.leftX}, this.game.CLIMB_TIME, null, true)
@@ -30,9 +27,6 @@
       climb = this.game.add.tween(this).to({x: this.rightX}, this.game.CLIMB_TIME, null, true)
       this.scale.x *= -1
     }
-
-    function finishClimb() { this.isClimbing = false }
-    this.game.time.events.add(this.game.CLIMB_TIME, finishClimb, this)
 
     this.side = dir
 
