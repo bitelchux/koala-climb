@@ -103,8 +103,9 @@ gulp.task('html', function(){
 
 gulp.task('connect', function () {
   connect.server({
-    root: [__dirname + '/src'],
-    port: 9000,
+    root: [__dirname + '/dist'],
+    port: 8008,
+    host: '0.0.0.0',
     livereload: true
   })
 })
