@@ -9,6 +9,7 @@
 
     create: function () {
       this.game.CLIMB_TIME = 100
+      this.game.add.sprite(0, 0, 'bg')
 
       var w = this.game.width
         , h = this.game.height
@@ -18,6 +19,8 @@
       // Input
       this.input.onDown.add(this.onInputDown, this)
       this.cursors = this.game.input.keyboard.createCursorKeys()
+      this.cursors.left.onDown.add(this.pressLeft, this)
+      this.cursors.right.onDown.add(this.pressRight, this)
 
       // Tree
       this.trunks = this.game.add.group()
@@ -27,20 +30,23 @@
       }
 
       //Player
-      this.player = new window['koala-climb'].Koala(this.game, w/2 - 35, 300)
+      this.player = new window['koala-climb'].Koala(this.game, w/2 - 35, h - (2 * this.TRUNK_HEIGHT))
       this.game.add.existing(this.player)
     },
 
     update: function () {
-      if (!this.player.isClimbing) {
-        if (this.cursors.left.isDown) {
-          this.player.climb('L')
-          this.moveTrunk()
-        } else if (this.cursors.right.isDown) {
-          this.player.climb('R')
-          this.moveTrunk()
-        }
-      }
+    },
+
+    pressLeft: function() {
+      if (this.trunks.getFirstAlive().isMoving) return false;
+      this.player.climb('L')
+      this.moveTrunk()
+    },
+
+    pressRight: function() {
+      if (this.trunks.getFirstAlive().isMoving) return false;
+      this.player.climb('R')
+      this.moveTrunk()
     },
 
     moveTrunk: function() {
@@ -52,6 +58,7 @@
       }
       this.trunks.sort('y', Phaser.Group.SORT_ASCENDING)
       trunkLocal.reset(this.game.width/2, this.trunks.getAt(0).y - this.TRUNK_HEIGHT)
+      trunkLocal.frame = this.game.rnd.integerInRange(0, 3)
       this.trunks.callAllExists('moveDown', true, this)
     },
 
