@@ -11,6 +11,7 @@
 
     create: function () {
       this.game.input.maxPointers = 1
+      this.game.stage.smoothed = false
 
       if (this.game.device.desktop) {
         this.game.scale.pageAlignHorizontally = true

@@ -4,6 +4,8 @@
   var Trunk = function(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'trunk', 0)
     this.anchor.setTo(0.5, 0)
+    this.scale.x = 2
+    this.scale.y = 2
 
     // Kill offscreen trunks
     this.checkWorldBounds = true
@@ -19,7 +21,7 @@
 
   Trunk.prototype.moveDown = function() {
     var newHeight = this.y + this.height
-    this.game.add.tween(this).to({y: newHeight}, 100, null, true)
+    this.game.add.tween(this).to({y: newHeight}, this.game.CLIMB_TIME, null, true)
     // tween.to(properties, duration, ease, autoStart, delay, repeat, yoyo)
   }
 
