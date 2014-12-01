@@ -26,7 +26,7 @@ Play.prototype = {
 
     // Tree
     this.trunks = this.game.add.group()
-    for (var i = h; i > 0; i -= this.TRUNK_HEIGHT) {
+    for (var i = h - this.TRUNK_HEIGHT; i >= 0; i -= this.TRUNK_HEIGHT) {
       var trunk = new Trunk(this.game, w/2, i)
       this.trunks.add(trunk)
     }
@@ -60,8 +60,28 @@ Play.prototype = {
     }
     this.trunks.sort('y', Phaser.Group.SORT_ASCENDING)
     trunkLocal.reset(this.game.width/2, this.trunks.getAt(0).y - this.TRUNK_HEIGHT)
+    trunkLocal.bringToTop()
     trunkLocal.frame = this.game.rnd.integerInRange(0, 3)
+
+    this.trunks.sort('y', Phaser.Group.SORT_DESCENDING)
     this.trunks.callAllExists('moveDown', true, this)
+
+    // Check if the koala position conflicts with the branch it's on
+    this.checkKoalaCollide(this.trunks.children[3])
+  },
+
+  checkKoalaCollide: function(trunkSegment) {
+    console.log('koala:', this.player.y, this.player.side)
+    console.log('trunk:', trunkSegment.frame, trunkSegment.y)
+    if (this.player.side === 'R' && trunkSegment.frame === 1) {
+      console.log("DEAD")
+    } else if (this.player.side === 'L' && trunkSegment.frame === 2) {
+      console.log("DEAD")
+    }
+
+    if (!trunkSegment.frame) {
+      // debugger
+    }
   },
 
   onInputDown: function () {
