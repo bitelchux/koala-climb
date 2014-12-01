@@ -85,8 +85,11 @@ Play.prototype = {
   },
 
   onInputDown: function () {
-    // Move left/right based on click position
-    this.moveTrunk()
+    if (this.game.input.activePointer.x < this.game.width * 0.5) {
+      this.pressLeft()
+    } else {
+      this.pressRight()
+    }
   },
 
   render: function() {
