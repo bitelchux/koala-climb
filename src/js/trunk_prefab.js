@@ -6,12 +6,7 @@ var Trunk = function(game, x, y) {
   this.scale.x = 2
   this.scale.y = 2
   this.isMoving = false
-
-  // Only 3 frames but we want more 0 index frames
-  this.frame = this.game.rnd.integerInRange(0, 2)
-  this.branchSide = this.frame === 1 ? 'R'
-                  : this.frame === 2 ? 'L'
-                  : 'NONE'
+  this.resetTrunk(y)
 
 }
 

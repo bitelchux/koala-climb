@@ -8,6 +8,7 @@ var Koala = function(game, x, y) {
   this.side = 'L'
   this.leftX = x
   this.rightX = x + 70
+  this.game.physics.enable(this, Phaser.Physics.ARCADE)
 }
 
 Koala.prototype = Object.create(Phaser.Sprite.prototype)
@@ -30,6 +31,22 @@ Koala.prototype.climb = function(dir) {
   this.side = dir
 
   // Run climb animation
+}
+
+Koala.prototype.fall = function() {
+  if (this.side === 'L') {
+    this.body.velocity.x = this.game.rnd.integerInRange(-200, -100)
+  } else if (this.side === 'R') {
+    this.body.velocity.x = this.game.rnd.integerInRange(100, 200)
+  }
+
+  this.body.gravity.y = 400
+  this.body.angularVelocity = this.game.rnd.integerInRange(-100, 100)
+  this.body.velocity.y = this.game.rnd.integerInRange(-100, -300)
+  console.log(
+    'x:', this.body.velocity.x
+  , 'y:', this.body.velocity.y
+  , 'ang:', this.body.angularVelocity)
 }
 
 module.exports = Koala

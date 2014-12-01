@@ -56,23 +56,20 @@ Play.prototype = {
     var trunkLocal = this.trunks.children[0]
     var topTrunk  = this.trunks.getAt(this.trunks.length - 1)
     trunkLocal.resetTrunk(topTrunk.y - this.TRUNK_HEIGHT)
-
-    this.trunks.sort('y', Phaser.Group.SORT_DESCENDING)
     this.trunks.callAllExists('moveDown', true, this)
 
     // Check if the koala position conflicts with the branch it's on
-    this.checkKoalaCollide(this.trunks.getAt(2))
+    this.checkKoalaCollide(this.trunks.getAt(3))
   },
 
   checkKoalaCollide: function(trunkSegment) {
-    console.log('koala:', this.player.y, this.player.side, 'trunk:', trunkSegment.branchSide, trunkSegment.y)
     if (this.player.side === trunkSegment.branchSide) {
-      console.log("DEAD")
+      this.endGame()
     }
+  },
 
-    if (!trunkSegment.frame) {
-      // debugger
-    }
+  endGame: function() {
+    this.player.fall()
   },
 
   onInputDown: function () {
