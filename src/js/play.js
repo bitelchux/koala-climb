@@ -70,6 +70,18 @@ Play.prototype = {
 
   endGame: function() {
     this.player.fall()
+    this.game.input.onDown.removeAll()
+    this.cursors.left.onDown.removeAll()
+    this.cursors.right.onDown.removeAll()
+    this.game.time.events.add(
+      Phaser.Timer.SECOND * 2
+    , this.restartState
+    , this
+    )
+  },
+
+  restartState: function() {
+    this.state.restart()
   },
 
   onInputDown: function () {
