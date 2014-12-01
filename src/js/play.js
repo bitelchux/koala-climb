@@ -26,7 +26,7 @@ Play.prototype = {
 
     // Tree
     this.trunks = this.game.add.group()
-    for (var i = h - this.TRUNK_HEIGHT; i >= 0; i -= this.TRUNK_HEIGHT) {
+    for (var i = h; i >= -2 * this.TRUNK_HEIGHT; i -= this.TRUNK_HEIGHT) {
       var trunk = new Trunk(this.game, w/2, i)
       this.trunks.add(trunk)
     }
@@ -52,30 +52,21 @@ Play.prototype = {
   },
 
   moveTrunk: function() {
-    var trunkLocal = this.trunks.getFirstDead()
-    if(!trunkLocal) {
-      trunkLocal = new Trunk(this.game, this.game.width/2, 1000)
-      this.trunks.add(trunkLocal)
-      console.log('new trunk!')
-    }
-    this.trunks.sort('y', Phaser.Group.SORT_ASCENDING)
-    trunkLocal.reset(this.game.width/2, this.trunks.getAt(0).y - this.TRUNK_HEIGHT)
-    trunkLocal.bringToTop()
-    trunkLocal.frame = this.game.rnd.integerInRange(0, 3)
+    this.trunks.sort('y', Phaser.Group.SORT_DESCENDING)
+    var trunkLocal = this.trunks.children[0]
+    var topTrunk  = this.trunks.getAt(this.trunks.length - 1)
+    trunkLocal.resetTrunk(topTrunk.y - this.TRUNK_HEIGHT)
 
     this.trunks.sort('y', Phaser.Group.SORT_DESCENDING)
     this.trunks.callAllExists('moveDown', true, this)
 
     // Check if the koala position conflicts with the branch it's on
-    this.checkKoalaCollide(this.trunks.children[3])
+    this.checkKoalaCollide(this.trunks.getAt(2))
   },
 
   checkKoalaCollide: function(trunkSegment) {
-    console.log('koala:', this.player.y, this.player.side)
-    console.log('trunk:', trunkSegment.frame, trunkSegment.y)
-    if (this.player.side === 'R' && trunkSegment.frame === 1) {
-      console.log("DEAD")
-    } else if (this.player.side === 'L' && trunkSegment.frame === 2) {
+    console.log('koala:', this.player.y, this.player.side, 'trunk:', trunkSegment.branchSide, trunkSegment.y)
+    if (this.player.side === trunkSegment.branchSide) {
       console.log("DEAD")
     }
 

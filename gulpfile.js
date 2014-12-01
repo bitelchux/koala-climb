@@ -43,7 +43,7 @@ gulp.task('copy-libs', ['clean'], function () {
     .on('error', gutil.log)
 })
 
-gulp.task('browserify', ['clean', 'lint'], function() {
+gulp.task('browserify', ['clean'], function() {
   gulp.src('src/js/main.js')
     .pipe(browserify({
       insertGlobals : true,
@@ -95,15 +95,14 @@ gulp.task('html', function(){
 
 gulp.task('connect', function () {
   connect.server({
-    root: [__dirname + '/dist', __dirname + '/tmp'],
+    root: [__dirname + '/dist'],
     port: 8008,
-    host: '0.0.0.0',
-    livereload: true
+    host: '0.0.0.0'
   })
 })
 
 gulp.task('watch', function () {
-  gulp.watch(paths.js, ['lint'])
+  // gulp.watch(paths.js, ['lint'])
   gulp.watch(['./src/index.html', paths.css, paths.js], ['html', 'build'])
 })
 
