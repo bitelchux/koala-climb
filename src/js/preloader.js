@@ -15,6 +15,7 @@ Preloader.prototype = {
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this)
     this.load.setPreloadSprite(this.asset)
+    this.load.image('time_meter', 'assets/time_meter.png')
     this.load.image('koala', 'assets/koala.png')
     this.load.image('player', 'assets/player.png')
     this.load.image('bg', 'assets/forest.jpg')

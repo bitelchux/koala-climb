@@ -2,6 +2,7 @@
 
 var Koala = require('./koala_prefab')
   , Trunk = require('./trunk_prefab')
+  , TimeBar = require('./timebar_prefab')
 
 function Play() {
   this.player = null
@@ -31,20 +32,29 @@ Play.prototype = {
       this.trunks.add(trunk)
     }
 
-    //Player
+    // Player
     this.player = new Koala(this.game, w/2 - 35, h - (2 * this.TRUNK_HEIGHT))
     this.game.add.existing(this.player)
 
+    // Score
     this.score = 0
-    this.scoreText = this.game.add.bitmapText(10, 10, 'minecraftia', '', 42)
+    this.scoreText = this.game.add.bitmapText(10, 30, 'minecraftia', '0', 42)
     this.game.add.existing(this.scoreText)
+
+    // Time Bar
+    this.timeBar = new TimeBar(this.game)
+    this.game.add.existing(this.timeBar)
 
   },
 
   update: function () {
+    // Update Score
     this.scoreText.setText(this.score)
     this.scoreText.updateText()
     this.scoreText.x = this.game.width / 2 - this.scoreText.textWidth / 2
+
+    // Check Timer
+    if (this.timeBar.remainingTime <= 0 && this.player.alive) this.endGame()
   },
 
   pressLeft: function() {
@@ -75,6 +85,7 @@ Play.prototype = {
       this.endGame()
     } else {
       this.score += 1
+      this.timeBar.bumpTime()
     }
   },
 
