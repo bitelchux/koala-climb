@@ -34,9 +34,17 @@ Play.prototype = {
     //Player
     this.player = new Koala(this.game, w/2 - 35, h - (2 * this.TRUNK_HEIGHT))
     this.game.add.existing(this.player)
+
+    this.score = 0
+    this.scoreText = this.game.add.bitmapText(10, 10, 'minecraftia', '', 42)
+    this.game.add.existing(this.scoreText)
+
   },
 
   update: function () {
+    this.scoreText.setText(this.score)
+    this.scoreText.updateText()
+    this.scoreText.x = this.game.width / 2 - this.scoreText.textWidth / 2
   },
 
   pressLeft: function() {
@@ -65,6 +73,8 @@ Play.prototype = {
   checkKoalaCollide: function(trunkSegment) {
     if (this.player.side === trunkSegment.branchSide) {
       this.endGame()
+    } else {
+      this.score += 1
     }
   },
 
