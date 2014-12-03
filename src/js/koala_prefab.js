@@ -3,12 +3,12 @@
 var Koala = function(game, x, y) {
   Phaser.Sprite.call(this, game, x, y, 'koala', 0)
   this.anchor.setTo(0.5, 0)
-  this.scale.x = 2
-  this.scale.y = 2
+  this.scale.set(2)
   this.side = 'L'
   this.leftX = x
   this.rightX = x + 70
   this.game.physics.enable(this, Phaser.Physics.ARCADE)
+  this.animations.add('climb', null, 20)
 }
 
 Koala.prototype = Object.create(Phaser.Sprite.prototype)
@@ -31,6 +31,7 @@ Koala.prototype.climb = function(dir) {
   this.side = dir
 
   // Run climb animation
+  this.animations.play('climb')
 }
 
 Koala.prototype.fall = function() {
