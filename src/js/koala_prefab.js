@@ -31,7 +31,8 @@ Koala.prototype.climb = function(dir) {
   this.side = dir
 
   // Run climb animation
-  this.animations.play('climb')
+  // this.animations.play('climb')
+  this.frame = this.frame ? 0 : 1
 }
 
 Koala.prototype.fall = function() {
