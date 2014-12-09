@@ -1436,7 +1436,7 @@ window.onload = function () {
   game.state.start('boot')
 }
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_7db30a10.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_23d95dd3.js","/")
 },{"./boot":5,"./menu":8,"./play":9,"./preloader":10,"buffer":1,"oMfpAn":4}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
@@ -1543,6 +1543,7 @@ module.exports = Menu
 var Koala = require('./koala_prefab')
   , Trunk = require('./trunk_prefab')
   , TimeBar = require('./timebar_prefab')
+  , Scoreboard = require('./scoreboard_prefab')
 
 function Play() {
   this.player = null
@@ -1589,7 +1590,7 @@ Play.prototype = {
 
   update: function () {
     // Update Score
-    this.scoreText.setText(this.score)
+    this.scoreText.setText(this.score.toString())
     this.scoreText.updateText()
     this.scoreText.x = this.game.width / 2 - this.scoreText.textWidth / 2
 
@@ -1634,15 +1635,7 @@ Play.prototype = {
     this.game.input.onDown.removeAll()
     this.cursors.left.onDown.removeAll()
     this.cursors.right.onDown.removeAll()
-    this.game.time.events.add(
-      Phaser.Timer.SECOND * 2
-    , this.restartState
-    , this
-    )
-  },
-
-  restartState: function() {
-    this.state.restart()
+    this.scoreboard = new Scoreboard(this.game, this.scoreText)
   },
 
   onInputDown: function () {
@@ -1661,7 +1654,7 @@ Play.prototype = {
 module.exports = Play
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/play.js","/")
-},{"./koala_prefab":7,"./timebar_prefab":11,"./trunk_prefab":12,"buffer":1,"oMfpAn":4}],10:[function(require,module,exports){
+},{"./koala_prefab":7,"./scoreboard_prefab":11,"./timebar_prefab":12,"./trunk_prefab":13,"buffer":1,"oMfpAn":4}],10:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
 
@@ -1709,6 +1702,74 @@ module.exports = Preloader
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
 
+var Scoreboard = function(game, existingScoreObj) {
+
+  Phaser.Group.call(this, game)
+  this.x = 0
+  this.y = this.game.height
+
+  // Not part of the group as it is tweened separately
+  this.scoreText = existingScoreObj
+
+  this.highScoreText = this.game.add.bitmapText(0, 200, 'minecraftia', '', 36, this)
+
+  this.show()
+}
+
+Scoreboard.prototype = Object.create(Phaser.Group.prototype)
+Scoreboard.prototype.constructor = Scoreboard
+
+Scoreboard.prototype.update = function() {
+  this.scoreText.x = this.game.width / 2 - this.scoreText.textWidth / 2
+}
+
+Scoreboard.prototype.show = function() {
+  var score = parseInt(this.scoreText.text)
+    , highScore = '-'
+
+  if(!!localStorage) {
+    try {
+      highScore = parseInt(localStorage.getItem('highScore'))
+      if(!highScore || highScore < score) {
+        highScore = score
+        localStorage.setItem('highScore', highScore)
+      }
+      window.highScore = highScore
+    } catch(err) {
+      console.error(err)
+    }
+  } else if(!window.highScore || window.highScore < score) {
+    window.highScore = score
+  }
+
+  this.highScoreText.setText('Record: ' + highScore)
+  this.highScoreText.updateText()
+  this.highScoreText.x = this.game.width / 2 - this.highScoreText.textWidth / 2
+
+  // Add input listener to restart game after 2 seconds
+  this.game.time.events.add(
+    Phaser.Timer.SECOND * 2
+  , function() {
+      this.game.input.onDown.addOnce(this.playClick, this)
+    }
+  , this)
+
+  this.game.add.tween(this.scoreText).to({ y: 100, fontSize: 72 }, 1000, Phaser.Easing.Bounce.Out, true)
+  this.game.add.tween(this).to({ y: 0 }, 1000, Phaser.Easing.Bounce.Out, true)
+}
+
+Scoreboard.prototype.playClick = function() {
+  this.game.state.start('play')
+  this.destroy()
+}
+
+module.exports = Scoreboard
+
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/scoreboard_prefab.js","/")
+},{"buffer":1,"oMfpAn":4}],12:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+'use strict'
+
 var TimeBar = function(game) {
 
   Phaser.Group.call(this, game)
@@ -1738,7 +1799,7 @@ TimeBar.prototype.bumpTime = function() {
 module.exports = TimeBar
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/timebar_prefab.js","/")
-},{"buffer":1,"oMfpAn":4}],12:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],13:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
 
