@@ -44,7 +44,7 @@ gulp.task('copy-libs', ['clean'], function () {
 })
 
 gulp.task('browserify', ['clean'], function() {
-  gulp.src('src/js/main.js')
+  return gulp.src('src/js/main.js')
     .pipe(browserify({
       insertGlobals : true,
       debug : !gulp.env.production
@@ -87,8 +87,8 @@ gulp.task('lint', function() {
     .on('error', gutil.log)
 })
 
-gulp.task('html', function(){
-  gulp.src('src/*.html')
+gulp.task('html', ['build'], function(){
+  gulp.src('dist/*.html')
     .pipe(connect.reload())
     .on('error', gutil.log)
 })
@@ -97,13 +97,14 @@ gulp.task('connect', function () {
   connect.server({
     root: [__dirname + '/dist'],
     port: 8008,
-    host: '0.0.0.0'
+    host: '0.0.0.0',
+    livereload: true
   })
 })
 
 gulp.task('watch', function () {
   // gulp.watch(paths.js, ['lint'])
-  gulp.watch(['./src/index.html', paths.css, paths.js], ['html', 'build'])
+  gulp.watch(['./src/index.html', paths.css, paths.js], ['html'])
 })
 
 gulp.task('zip', function() {
@@ -112,6 +113,6 @@ gulp.task('zip', function() {
     .pipe(gulp.dest('./dist/'));
 })
 
-gulp.task('default', ['connect', 'watch', 'build'])
+gulp.task('default', ['connect', 'watch'])
 gulp.task('build', ['copy', 'copy-libs', 'browserify', 'minifycss', 'processhtml', 'minifyhtml'])
 
