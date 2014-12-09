@@ -3,6 +3,7 @@
 var Koala = require('./koala_prefab')
   , Trunk = require('./trunk_prefab')
   , TimeBar = require('./timebar_prefab')
+  , Scoreboard = require('./scoreboard_prefab')
 
 function Play() {
   this.player = null
@@ -49,7 +50,7 @@ Play.prototype = {
 
   update: function () {
     // Update Score
-    this.scoreText.setText(this.score)
+    this.scoreText.setText(this.score.toString())
     this.scoreText.updateText()
     this.scoreText.x = this.game.width / 2 - this.scoreText.textWidth / 2
 
@@ -94,15 +95,7 @@ Play.prototype = {
     this.game.input.onDown.removeAll()
     this.cursors.left.onDown.removeAll()
     this.cursors.right.onDown.removeAll()
-    this.game.time.events.add(
-      Phaser.Timer.SECOND * 2
-    , this.restartState
-    , this
-    )
-  },
-
-  restartState: function() {
-    this.state.restart()
+    this.scoreboard = new Scoreboard(this.game, this.scoreText)
   },
 
   onInputDown: function () {
