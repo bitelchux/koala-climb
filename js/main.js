@@ -1436,7 +1436,7 @@ window.onload = function () {
   game.state.start('boot')
 }
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_23d95dd3.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_89eb525d.js","/")
 },{"./boot":5,"./menu":8,"./play":9,"./preloader":10,"buffer":1,"oMfpAn":4}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
@@ -1553,10 +1553,13 @@ Play.prototype = {
 
   create: function () {
     this.game.CLIMB_TIME = 100
-    this.game.add.sprite(0, 0, 'bg')
 
     var w = this.game.width
       , h = this.game.height
+      , bg = this.game.add.sprite(0, 0, 'bg')
+
+    bg.width = w
+    bg.height = h
 
     this.TRUNK_HEIGHT = 70
 
@@ -1676,7 +1679,7 @@ Preloader.prototype = {
     this.load.setPreloadSprite(this.asset)
     this.load.image('time_meter', 'assets/time_meter.png')
     this.load.image('player', 'assets/player.png')
-    this.load.image('bg', 'assets/forest.jpg')
+    this.load.image('bg', 'assets/bg_green.png')
     this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml')
   },
 
@@ -1751,6 +1754,10 @@ Scoreboard.prototype.show = function() {
     Phaser.Timer.SECOND * 2
   , function() {
       this.game.input.onDown.addOnce(this.playClick, this)
+      this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT)
+          .onDown.addOnce(this.playClick, this)
+      this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
+          .onDown.addOnce(this.playClick, this)
     }
   , this)
 
@@ -1759,6 +1766,8 @@ Scoreboard.prototype.show = function() {
 }
 
 Scoreboard.prototype.playClick = function() {
+  this.game.input.onDown.removeAll()
+  this.game.input.keyboard.clearCaptures()
   this.game.state.start('play')
   this.destroy()
 }
@@ -1775,7 +1784,7 @@ var TimeBar = function(game) {
   Phaser.Group.call(this, game)
   this.BAR_WIDTH = 200
   this.remainingTime = 100
-  this.DECREASE_RATE = 0.1
+  this.decreaseRate = 0.1
   this.INCREASE_RATE = 1
   this.meter = this.game.add.sprite((game.width - this.BAR_WIDTH) * 0.5, 20, 'time_meter')
   this.add(this.meter)
@@ -1787,7 +1796,11 @@ TimeBar.prototype = Object.create(Phaser.Group.prototype)
 TimeBar.prototype.constructor = TimeBar
 
 TimeBar.prototype.update = function() {
-  this.remainingTime -= this.DECREASE_RATE
+  this.decreaseRate = Math.min(
+    this.decreaseRate + this.game.time.totalElapsedSeconds()/50000
+  , 0.15
+  )
+  this.remainingTime -= this.decreaseRate
   this.meter.width = (Math.max(this.remainingTime, 0) / 100) * this.BAR_WIDTH
 }
 
