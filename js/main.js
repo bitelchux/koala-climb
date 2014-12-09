@@ -1409,12 +1409,6 @@ Boot.prototype = {
       this.game.scale.pageAlignHorizontally = true
     } else {
       this.game.scaleMode = Phaser.ScaleManager.SHOW_ALL
-      // this.game.scale.minWidth =  480
-      // this.game.scale.minHeight = 260
-      // this.game.scale.maxWidth = 640
-      // this.game.scale.maxHeight = 480
-      // this.game.scale.forceLandscape = true
-      // this.game.scale.pageAlignHorizontally = true
       this.game.scale.setScreenSize(true)
     }
     this.game.state.start('preloader')
@@ -1442,7 +1436,7 @@ window.onload = function () {
   game.state.start('boot')
 }
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_b8af2e28.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_7db30a10.js","/")
 },{"./boot":5,"./menu":8,"./play":9,"./preloader":10,"buffer":1,"oMfpAn":4}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
@@ -1600,17 +1594,17 @@ Play.prototype = {
     this.scoreText.x = this.game.width / 2 - this.scoreText.textWidth / 2
 
     // Check Timer
-    if (this.timeBar.remainingTime <= 0 && this.player.alive) this.endGame()
+    if (this.timeBar.remainingTime <= 0 && this.player.alive) { this.endGame() }
   },
 
   pressLeft: function() {
-    if (this.trunks.getFirstAlive().isMoving) return false;
+    if (this.trunks.getFirstAlive().isMoving) { return false; }
     this.player.climb('L')
     this.moveTrunk()
   },
 
   pressRight: function() {
-    if (this.trunks.getFirstAlive().isMoving) return false;
+    if (this.trunks.getFirstAlive().isMoving) { return false; }
     this.player.climb('R')
     this.moveTrunk()
   },
@@ -1738,7 +1732,7 @@ TimeBar.prototype.update = function() {
 
 TimeBar.prototype.bumpTime = function() {
   this.remainingTime += this.INCREASE_RATE
-  if (this.remainingTime > 100) this.remainingTime = 100
+  if (this.remainingTime > 100) { this.remainingTime = 100 }
 }
 
 module.exports = TimeBar
