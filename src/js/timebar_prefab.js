@@ -23,7 +23,7 @@ TimeBar.prototype.update = function() {
 
 TimeBar.prototype.bumpTime = function() {
   this.remainingTime += this.INCREASE_RATE
-  if (this.remainingTime > 100) this.remainingTime = 100
+  if (this.remainingTime > 100) { this.remainingTime = 100 }
 }
 
 module.exports = TimeBar

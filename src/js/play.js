@@ -54,17 +54,17 @@ Play.prototype = {
     this.scoreText.x = this.game.width / 2 - this.scoreText.textWidth / 2
 
     // Check Timer
-    if (this.timeBar.remainingTime <= 0 && this.player.alive) this.endGame()
+    if (this.timeBar.remainingTime <= 0 && this.player.alive) { this.endGame() }
   },
 
   pressLeft: function() {
-    if (this.trunks.getFirstAlive().isMoving) return false;
+    if (this.trunks.getFirstAlive().isMoving) { return false; }
     this.player.climb('L')
     this.moveTrunk()
   },
 
   pressRight: function() {
-    if (this.trunks.getFirstAlive().isMoving) return false;
+    if (this.trunks.getFirstAlive().isMoving) { return false; }
     this.player.climb('R')
     this.moveTrunk()
   },
