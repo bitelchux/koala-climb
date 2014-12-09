@@ -13,10 +13,13 @@ Play.prototype = {
 
   create: function () {
     this.game.CLIMB_TIME = 100
-    this.game.add.sprite(0, 0, 'bg')
 
     var w = this.game.width
       , h = this.game.height
+      , bg = this.game.add.sprite(0, 0, 'bg')
+
+    bg.width = w
+    bg.height = h
 
     this.TRUNK_HEIGHT = 70
 

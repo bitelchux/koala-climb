@@ -49,6 +49,10 @@ Scoreboard.prototype.show = function() {
     Phaser.Timer.SECOND * 2
   , function() {
       this.game.input.onDown.addOnce(this.playClick, this)
+      this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT)
+          .onDown.addOnce(this.playClick, this)
+      this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
+          .onDown.addOnce(this.playClick, this)
     }
   , this)
 
@@ -57,6 +61,8 @@ Scoreboard.prototype.show = function() {
 }
 
 Scoreboard.prototype.playClick = function() {
+  this.game.input.onDown.removeAll()
+  this.game.input.keyboard.clearCaptures()
   this.game.state.start('play')
   this.destroy()
 }

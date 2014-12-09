@@ -18,7 +18,7 @@ Preloader.prototype = {
     this.load.setPreloadSprite(this.asset)
     this.load.image('time_meter', 'assets/time_meter.png')
     this.load.image('player', 'assets/player.png')
-    this.load.image('bg', 'assets/forest.jpg')
+    this.load.image('bg', 'assets/bg_green.png')
     this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml')
   },
 
