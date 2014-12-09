@@ -5,8 +5,6 @@ var gulp = require('gulp')
   , concat = require('gulp-concat')
   , rename = require('gulp-rename')
   , minifycss = require('gulp-minify-css')
-  , minifyhtml = require('gulp-minify-html')
-  , processhtml = require('gulp-processhtml')
   , jshint = require('gulp-jshint')
   , uglify = require('gulp-uglify')
   , connect = require('gulp-connect')
@@ -34,9 +32,11 @@ gulp.task('copy', ['clean'], function () {
   gulp.src(paths.assets)
     .pipe(gulp.dest(paths.dist + 'assets'))
     .on('error', gutil.log)
-})
 
-gulp.task('copy-libs', ['clean'], function () {
+  gulp.src('src/index.html')
+    .pipe(gulp.dest(paths.dist))
+    .on('error', gutil.log)
+
   gulp.src(paths.libs)
     .pipe(concat('lib.js'))
     .pipe(gulp.dest(paths.dist + 'js'))
@@ -46,8 +46,7 @@ gulp.task('copy-libs', ['clean'], function () {
 gulp.task('browserify', ['clean'], function() {
   return gulp.src('src/js/main.js')
     .pipe(browserify({
-      insertGlobals : true,
-      debug : !gulp.env.production
+      insertGlobals : true
     }))
     .pipe(gulp.dest(paths.dist + 'js'))
     .pipe(uglify({outSourceMaps: false}))
@@ -62,20 +61,6 @@ gulp.task('minifycss', ['clean'], function () {
       removeEmpty: true
     }))
     .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest(paths.dist))
-    .on('error', gutil.log)
-})
-
-gulp.task('processhtml', ['clean'], function() {
-  gulp.src('src/index.html')
-    .pipe(processhtml('index.html'))
-    .pipe(gulp.dest(paths.dist))
-    .on('error', gutil.log)
-})
-
-gulp.task('minifyhtml', ['clean'], function() {
-  gulp.src('dist/index.html')
-    .pipe(minifyhtml())
     .pipe(gulp.dest(paths.dist))
     .on('error', gutil.log)
 })
@@ -103,7 +88,7 @@ gulp.task('connect', function () {
 })
 
 gulp.task('watch', function () {
-  // gulp.watch(paths.js, ['lint'])
+  gulp.watch(paths.js, ['lint'])
   gulp.watch(['./src/index.html', paths.css, paths.js], ['html'])
 })
 
@@ -113,6 +98,6 @@ gulp.task('zip', function() {
     .pipe(gulp.dest('./dist/'));
 })
 
-gulp.task('default', ['connect', 'watch'])
-gulp.task('build', ['copy', 'copy-libs', 'browserify', 'minifycss', 'processhtml', 'minifyhtml'])
+gulp.task('default', ['connect', 'watch', 'build'])
+gulp.task('build', ['copy', 'browserify', 'minifycss'])
 

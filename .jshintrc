@@ -20,6 +20,8 @@
   "sub": true,
   "debug": true,
   "globals": {
-    "Phaser": false
+    "Phaser": false,
+    "module": false,
+    "require": false
   }
 }
