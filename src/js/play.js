@@ -32,7 +32,9 @@ Play.prototype = {
     // Tree
     this.trunks = this.game.add.group()
     for (var i = h; i >= -2 * this.TRUNK_HEIGHT; i -= this.TRUNK_HEIGHT) {
-      var trunk = new Trunk(this.game, w/2, i)
+      // prevent branches at start
+      var random = !(i >= h - 2 * this.TRUNK_HEIGHT)
+      var trunk = new Trunk(this.game, w/2, i, random)
       this.trunks.add(trunk)
     }
 

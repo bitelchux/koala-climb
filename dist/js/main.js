@@ -1436,7 +1436,7 @@ window.onload = function () {
   game.state.start('boot')
 }
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_e7feffbd.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_da25e922.js","/")
 },{"./boot":5,"./menu":8,"./play":9,"./preloader":10,"buffer":1,"oMfpAn":4}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
@@ -1572,7 +1572,9 @@ Play.prototype = {
     // Tree
     this.trunks = this.game.add.group()
     for (var i = h; i >= -2 * this.TRUNK_HEIGHT; i -= this.TRUNK_HEIGHT) {
-      var trunk = new Trunk(this.game, w/2, i)
+      // prevent branches at start
+      var random = !(i >= h - 2 * this.TRUNK_HEIGHT)
+      var trunk = new Trunk(this.game, w/2, i, random)
       this.trunks.add(trunk)
     }
 
@@ -1816,13 +1818,13 @@ module.exports = TimeBar
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
 
-var Trunk = function(game, x, y) {
+var Trunk = function(game, x, y, random) {
   Phaser.Sprite.call(this, game, x, y, 'trunk', 0)
   this.anchor.setTo(0.5, 0)
   this.scale.x = 2
   this.scale.y = 2
   this.isMoving = false
-  this.resetTrunk(y)
+  if (random) { this.resetTrunk(y) }
 
 }
 

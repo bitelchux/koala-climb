@@ -1,12 +1,12 @@
 'use strict'
 
-var Trunk = function(game, x, y) {
+var Trunk = function(game, x, y, random) {
   Phaser.Sprite.call(this, game, x, y, 'trunk', 0)
   this.anchor.setTo(0.5, 0)
   this.scale.x = 2
   this.scale.y = 2
   this.isMoving = false
-  this.resetTrunk(y)
+  if (random) { this.resetTrunk(y) }
 
 }
 
