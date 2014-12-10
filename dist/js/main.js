@@ -1506,7 +1506,7 @@ function init() {
 // Start the app
 navigator.isCocoonJS ? init() : window.onload = init
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_af522ddd.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_1977db4a.js","/")
 },{"./boot":5,"./domish_parser":6,"./menu":9,"./play":10,"./preloader":11,"buffer":1,"oMfpAn":4}],8:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
@@ -1748,7 +1748,8 @@ Preloader.prototype = {
     this.load.spritesheet('koala', 'assets/koala.png', 30, 35)
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this)
-    this.load.image('time_meter', 'assets/time_meter.png')
+    this.load.image('time_bar', 'assets/time_bar.png')
+    this.load.image('time_bar_wrap', 'assets/time_bar_wrap.png')
     this.load.image('player', 'assets/player.png')
     this.load.image('bg', 'assets/bg_blue.png')
 
@@ -1859,9 +1860,12 @@ var TimeBar = function(game) {
   this.remainingTime = 100
   this.decreaseRate = 0.1
   this.INCREASE_RATE = 1
-  this.meter = this.game.add.sprite((game.width - this.BAR_WIDTH) * 0.5, 20, 'time_meter')
+  this.wrap = this.game.add.sprite((game.width - this.BAR_WIDTH) * 0.5 - 4, 20, 'time_bar_wrap')
+  this.meter = this.game.add.sprite((game.width - this.BAR_WIDTH) * 0.5, 20, 'time_bar')
+  this.add(this.wrap)
   this.add(this.meter)
   this.meter.anchor.setTo(0, 0.5)
+  this.wrap.anchor.setTo(0, 0.5)
   this.meter.width = this.BAR_WIDTH
 }
 

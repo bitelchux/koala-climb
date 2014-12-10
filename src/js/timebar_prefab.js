@@ -7,9 +7,12 @@ var TimeBar = function(game) {
   this.remainingTime = 100
   this.decreaseRate = 0.1
   this.INCREASE_RATE = 1
-  this.meter = this.game.add.sprite((game.width - this.BAR_WIDTH) * 0.5, 20, 'time_meter')
+  this.wrap = this.game.add.sprite((game.width - this.BAR_WIDTH) * 0.5 - 4, 20, 'time_bar_wrap')
+  this.meter = this.game.add.sprite((game.width - this.BAR_WIDTH) * 0.5, 20, 'time_bar')
+  this.add(this.wrap)
   this.add(this.meter)
   this.meter.anchor.setTo(0, 0.5)
+  this.wrap.anchor.setTo(0, 0.5)
   this.meter.width = this.BAR_WIDTH
 }
 

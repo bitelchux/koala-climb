@@ -17,7 +17,8 @@ Preloader.prototype = {
     this.load.spritesheet('koala', 'assets/koala.png', 30, 35)
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this)
-    this.load.image('time_meter', 'assets/time_meter.png')
+    this.load.image('time_bar', 'assets/time_bar.png')
+    this.load.image('time_bar_wrap', 'assets/time_bar_wrap.png')
     this.load.image('player', 'assets/player.png')
     this.load.image('bg', 'assets/bg_blue.png')
 
