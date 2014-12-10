@@ -17,6 +17,7 @@ TimeBar.prototype = Object.create(Phaser.Group.prototype)
 TimeBar.prototype.constructor = TimeBar
 
 TimeBar.prototype.update = function() {
+  if (!this.alive) return;
   this.decreaseRate = Math.min(
     this.decreaseRate + this.game.time.totalElapsedSeconds()/50000
   , 0.15

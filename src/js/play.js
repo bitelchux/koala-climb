@@ -97,6 +97,7 @@ Play.prototype = {
 
   endGame: function() {
     this.player.fall()
+    this.timeBar.alive = false
     this.game.input.onDown.removeAll()
     this.cursors.left.onDown.removeAll()
     this.cursors.right.onDown.removeAll()
