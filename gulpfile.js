@@ -28,16 +28,20 @@ gulp.task('clean', function () {
     .on('error', gutil.log)
 })
 
-gulp.task('copy', ['clean'], function () {
-  gulp.src(paths.assets)
+gulp.task('copy-assets', ['clean'], function () {
+  return gulp.src(paths.assets)
     .pipe(gulp.dest(paths.dist + 'assets'))
     .on('error', gutil.log)
+})
 
-  gulp.src('src/index.html')
+gulp.task('copy-static', ['clean'], function () {
+  return gulp.src('src/index.html')
     .pipe(gulp.dest(paths.dist))
     .on('error', gutil.log)
+})
 
-  gulp.src(paths.libs)
+gulp.task('copy-libs', ['clean'], function () {
+  return gulp.src(paths.libs)
     .pipe(concat('lib.js'))
     .pipe(gulp.dest(paths.dist + 'js'))
     .on('error', gutil.log)
@@ -55,7 +59,7 @@ gulp.task('browserify', ['clean'], function() {
 });
 
 gulp.task('minifycss', ['clean'], function () {
-  gulp.src(paths.css)
+  return gulp.src(paths.css)
     .pipe(minifycss({
       keepSpecialComments: false,
       removeEmpty: true
@@ -89,15 +93,15 @@ gulp.task('connect', function () {
 
 gulp.task('watch', function () {
   gulp.watch(paths.js, ['lint'])
-  gulp.watch(['./src/index.html', paths.css, paths.js], ['html'])
+  gulp.watch(['./src/index.html', paths.css, paths.js], ['html', 'build'])
 })
 
 gulp.task('zip', function() {
-  return gulp.src(['./dist/*/**', './dist/*'])
+  gulp.src(['./dist/*/**', './dist/*'])
     .pipe(zip('Archive.zip'))
     .pipe(gulp.dest('./dist/'));
 })
 
 gulp.task('default', ['connect', 'watch', 'build'])
-gulp.task('build', ['copy', 'browserify', 'minifycss'])
+gulp.task('build', ['copy-assets', 'copy-static', 'copy-libs', 'browserify', 'minifycss'])
 
