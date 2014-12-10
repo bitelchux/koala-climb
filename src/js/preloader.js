@@ -19,7 +19,7 @@ Preloader.prototype = {
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this)
     this.load.image('time_meter', 'assets/time_meter.png')
     this.load.image('player', 'assets/player.png')
-    this.load.image('bg', 'assets/bg_green.png')
+    this.load.image('bg', 'assets/bg_blue.png')
 
     var fileFormat = (this.game.device.cocoonJS) ? '.json' : '.xml'
     console.log(fileFormat, 'font format')

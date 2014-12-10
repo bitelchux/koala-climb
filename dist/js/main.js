@@ -1506,7 +1506,7 @@ function init() {
 // Start the app
 navigator.isCocoonJS ? init() : window.onload = init
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_9ad09d8d.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_af522ddd.js","/")
 },{"./boot":5,"./domish_parser":6,"./menu":9,"./play":10,"./preloader":11,"buffer":1,"oMfpAn":4}],8:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
@@ -1619,6 +1619,7 @@ Play.prototype = {
 
   create: function () {
     this.game.CLIMB_TIME = 100
+    this.game.stage.backgroundColor = '#7FB0FF'
 
     var w = this.game.width
       , h = this.game.height
@@ -1749,7 +1750,7 @@ Preloader.prototype = {
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this)
     this.load.image('time_meter', 'assets/time_meter.png')
     this.load.image('player', 'assets/player.png')
-    this.load.image('bg', 'assets/bg_green.png')
+    this.load.image('bg', 'assets/bg_blue.png')
 
     var fileFormat = (this.game.device.cocoonJS) ? '.json' : '.xml'
     console.log(fileFormat, 'font format')

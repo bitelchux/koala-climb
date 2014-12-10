@@ -13,6 +13,7 @@ Play.prototype = {
 
   create: function () {
     this.game.CLIMB_TIME = 100
+    this.game.stage.backgroundColor = '#7FB0FF'
 
     var w = this.game.width
       , h = this.game.height
