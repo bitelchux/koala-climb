@@ -1423,6 +1423,8 @@ module.exports = Boot
 window.onload = function () {
   'use strict'
 
+  console.log('Cocoon?', navigator.isCocoonJS)
+
   var width = window.innerWidth
     , height = window.innerHeight
 
@@ -1436,7 +1438,7 @@ window.onload = function () {
   game.state.start('boot')
 }
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_da25e922.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_f65d3b71.js","/")
 },{"./boot":5,"./menu":8,"./play":9,"./preloader":10,"buffer":1,"oMfpAn":4}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
@@ -1664,21 +1666,22 @@ module.exports = Play
 'use strict'
 
 function Preloader() {
-  this.asset = null
   this.ready = false
 }
 
 Preloader.prototype = {
 
   preload: function () {
-    this.asset = this.add.sprite(320, 240, 'preloader')
-    this.asset.anchor.setTo(0.5, 0.5)
+    if (!navigator.isCocoonJS) {
+      this.asset = this.add.sprite(this.game.width/2, this.game.height/2, 'preloader')
+      this.asset.anchor.setTo(0.5, 0.5)
+      this.load.setPreloadSprite(this.asset)
+    }
 
     this.load.spritesheet('trunk', 'assets/trunk.png', 200, 35)
     this.load.spritesheet('koala', 'assets/koala.png', 30, 35)
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this)
-    this.load.setPreloadSprite(this.asset)
     this.load.image('time_meter', 'assets/time_meter.png')
     this.load.image('player', 'assets/player.png')
     this.load.image('bg', 'assets/bg_green.png')
@@ -1686,7 +1689,6 @@ Preloader.prototype = {
   },
 
   create: function () {
-    this.asset.cropEnabled = false
   },
 
   update: function () {

@@ -1,6 +1,8 @@
 window.onload = function () {
   'use strict'
 
+  console.log('Cocoon?', navigator.isCocoonJS)
+
   var width = window.innerWidth
     , height = window.innerHeight
 
