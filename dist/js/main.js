@@ -1405,12 +1405,10 @@ Boot.prototype = {
     this.game.input.maxPointers = 1
     this.game.stage.smoothed = false
 
-    if (this.game.device.desktop) {
-      this.game.scale.pageAlignHorizontally = true
-    } else {
-      this.game.scaleMode = Phaser.ScaleManager.SHOW_ALL
-      this.game.scale.setScreenSize(true)
-    }
+    this.game.scaleMode = Phaser.ScaleManager.SHOW_ALL
+    this.game.scale.pageAlignHorizontally = true
+    this.game.scale.setScreenSize(true)
+
     this.game.state.start('preloader')
   }
 }
@@ -1493,7 +1491,6 @@ function init() {
   require('./domish_parser')(window.cocoonjsphaser = window.cocoonjsphaser || {})
   if (navigator.isCocoonJS) { cocoonjsphaser.utils.fixDOMParser() }
 
-
   width = window.innerWidth
   height = window.innerHeight
   game = new Phaser.Game(width, height, Phaser.CANVAS, '')
@@ -1509,7 +1506,7 @@ function init() {
 // Start the app
 navigator.isCocoonJS ? init() : window.onload = init
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_f10b8d7e.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_b36b2775.js","/")
 },{"./boot":5,"./domish_parser":6,"./menu":9,"./play":10,"./preloader":11,"buffer":1,"oMfpAn":4}],8:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'

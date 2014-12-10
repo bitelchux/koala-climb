@@ -10,7 +10,6 @@ function init() {
   require('./domish_parser')(window.cocoonjsphaser = window.cocoonjsphaser || {})
   if (navigator.isCocoonJS) { cocoonjsphaser.utils.fixDOMParser() }
 
-
   width = window.innerWidth
   height = window.innerHeight
   game = new Phaser.Game(width, height, Phaser.CANVAS, '')
