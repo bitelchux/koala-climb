@@ -46,10 +46,6 @@ Koala.prototype.fall = function() {
   this.body.gravity.y = 400
   this.body.angularVelocity = this.game.rnd.integerInRange(-100, 100)
   this.body.velocity.y = this.game.rnd.integerInRange(-100, -300)
-  console.log(
-    'x:', this.body.velocity.x
-  , 'y:', this.body.velocity.y
-  , 'ang:', this.body.angularVelocity)
 }
 
 module.exports = Koala

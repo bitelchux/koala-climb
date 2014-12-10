@@ -1420,15 +1420,83 @@ module.exports = Boot
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/boot.js","/")
 },{"buffer":1,"oMfpAn":4}],6:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-window.onload = function () {
-  'use strict'
+'use strict'
+
+module.exports = function (cocoonjsphaser) {
+
+    cocoonjsphaser.utils = {
+        fixDOMParser: function () {
+            window.DOMParser = DOMishParser;
+        }
+    };
+
+    function DOMishParser() { }
+    DOMishParser.prototype.parseFromString = function (data) {
+        return new DOMishObject(JSON.parse(data));
+    };
+
+    function DOMishAttributes() { }
+    DOMishAttributes.prototype.getNamedItem = function (name) {
+        return {
+            nodeValue: this[name] || null
+        };
+    };
+
+    function makeDOMishObject(data) {
+        return new DOMishObject(data);
+    }
+
+    function DOMishObject(data) {
+        this.attributes = this.convertContent(data);
+        this.length = Object.keys(this.attributes).length;
+    }
+    DOMishObject.prototype.documentElement = document;
+    DOMishObject.prototype.convertContent = function (obj) {
+        var attributes = new DOMishAttributes(),
+            prop;
+
+        for (prop in obj) {
+            if (obj[prop] !== null && typeof obj[prop] === 'object') {
+                attributes[prop] = Array.isArray(obj[prop]) ?
+                    obj[prop].map(makeDOMishObject) : new DOMishObject(obj[prop]);
+            } else {
+                attributes[prop] = obj[prop];
+            }
+        }
+
+        return attributes;
+    };
+    DOMishObject.prototype.getElementsByTagName = function (name) {
+        return this.attributes[name] ?
+            Array.isArray(this.attributes[name]) ?
+            this.attributes[name] : [this.attributes[name]] : [];
+    };
+
+    DOMishObject.prototype.getAttribute = function (name) {
+        return this.attributes.getNamedItem(name).nodeValue;
+    };
+
+}
+
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/domish_parser.js","/")
+},{"buffer":1,"oMfpAn":4}],7:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+'use strict'
+
+var width, height, game
+
+function init() {
 
   console.log('Cocoon?', navigator.isCocoonJS)
 
-  var width = window.innerWidth
-    , height = window.innerHeight
+  //========== DOMishParser for Cocoon.js ============
+  require('./domish_parser')(window.cocoonjsphaser = window.cocoonjsphaser || {})
+  if (navigator.isCocoonJS) { cocoonjsphaser.utils.fixDOMParser() }
 
-  var game = new Phaser.Game(width, height, Phaser.CANVAS, '')
+
+  width = window.innerWidth
+  height = window.innerHeight
+  game = new Phaser.Game(width, height, Phaser.CANVAS, '')
 
   game.state.add('boot', require('./boot'))
   game.state.add('preloader', require('./preloader'))
@@ -1438,8 +1506,11 @@ window.onload = function () {
   game.state.start('boot')
 }
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_f65d3b71.js","/")
-},{"./boot":5,"./menu":8,"./play":9,"./preloader":10,"buffer":1,"oMfpAn":4}],7:[function(require,module,exports){
+// Start the app
+navigator.isCocoonJS ? init() : window.onload = init
+
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_f10b8d7e.js","/")
+},{"./boot":5,"./domish_parser":6,"./menu":9,"./play":10,"./preloader":11,"buffer":1,"oMfpAn":4}],8:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
 
@@ -1489,16 +1560,12 @@ Koala.prototype.fall = function() {
   this.body.gravity.y = 400
   this.body.angularVelocity = this.game.rnd.integerInRange(-100, 100)
   this.body.velocity.y = this.game.rnd.integerInRange(-100, -300)
-  console.log(
-    'x:', this.body.velocity.x
-  , 'y:', this.body.velocity.y
-  , 'ang:', this.body.angularVelocity)
 }
 
 module.exports = Koala
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/koala_prefab.js","/")
-},{"buffer":1,"oMfpAn":4}],8:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],9:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
 
@@ -1538,7 +1605,7 @@ Menu.prototype = {
 module.exports = Menu
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/menu.js","/")
-},{"buffer":1,"oMfpAn":4}],9:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],10:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
 
@@ -1661,7 +1728,7 @@ Play.prototype = {
 module.exports = Play
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/play.js","/")
-},{"./koala_prefab":7,"./scoreboard_prefab":11,"./timebar_prefab":12,"./trunk_prefab":13,"buffer":1,"oMfpAn":4}],10:[function(require,module,exports){
+},{"./koala_prefab":8,"./scoreboard_prefab":12,"./timebar_prefab":13,"./trunk_prefab":14,"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
 
@@ -1685,7 +1752,10 @@ Preloader.prototype = {
     this.load.image('time_meter', 'assets/time_meter.png')
     this.load.image('player', 'assets/player.png')
     this.load.image('bg', 'assets/bg_green.png')
-    this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml')
+
+    var fileFormat = (this.game.device.cocoonJS) ? '.json' : '.xml'
+    console.log(fileFormat, 'font format')
+    this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia' + fileFormat)
   },
 
   create: function () {
@@ -1705,7 +1775,7 @@ Preloader.prototype = {
 module.exports = Preloader
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/preloader.js","/")
-},{"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],12:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
 
@@ -1779,7 +1849,7 @@ Scoreboard.prototype.playClick = function() {
 module.exports = Scoreboard
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/scoreboard_prefab.js","/")
-},{"buffer":1,"oMfpAn":4}],12:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],13:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
 
@@ -1816,7 +1886,7 @@ TimeBar.prototype.bumpTime = function() {
 module.exports = TimeBar
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/timebar_prefab.js","/")
-},{"buffer":1,"oMfpAn":4}],13:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],14:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict'
 
@@ -1857,4 +1927,4 @@ module.exports = Trunk
 
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/trunk_prefab.js","/")
-},{"buffer":1,"oMfpAn":4}]},{},[6])
+},{"buffer":1,"oMfpAn":4}]},{},[7])

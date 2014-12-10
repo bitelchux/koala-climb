@@ -1,12 +1,19 @@
-window.onload = function () {
-  'use strict'
+'use strict'
+
+var width, height, game
+
+function init() {
 
   console.log('Cocoon?', navigator.isCocoonJS)
 
-  var width = window.innerWidth
-    , height = window.innerHeight
+  //========== DOMishParser for Cocoon.js ============
+  require('./domish_parser')(window.cocoonjsphaser = window.cocoonjsphaser || {})
+  if (navigator.isCocoonJS) { cocoonjsphaser.utils.fixDOMParser() }
 
-  var game = new Phaser.Game(width, height, Phaser.CANVAS, '')
+
+  width = window.innerWidth
+  height = window.innerHeight
+  game = new Phaser.Game(width, height, Phaser.CANVAS, '')
 
   game.state.add('boot', require('./boot'))
   game.state.add('preloader', require('./preloader'))
@@ -15,3 +22,6 @@ window.onload = function () {
 
   game.state.start('boot')
 }
+
+// Start the app
+navigator.isCocoonJS ? init() : window.onload = init
